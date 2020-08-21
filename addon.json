@@ -1,0 +1,6 @@
+{
+	"title"		:	"Control HUD",
+	"type"		:	"tool",
+	"tags"		:	[ "fun", "scenic" ],
+	"ignore"	:	[ "icon.jpg", "*.bat", ".gitattributes", "LICENSE", "README.md", "related/*" ]
+}

@@ -4,7 +4,7 @@
 
 ControlHUD = ControlHUD or {}
 
-ControlHUD.Version = '1.0'
+ControlHUD.Version = '1.0.1'
 ControlHUD.Author  = 'JFAexe'
 ControlHUD.HooksID = 'control_hud'
 
@@ -149,6 +149,7 @@ function ControlHUD:GetConv(var, type)
 end
 
 function ControlHUD:UpdateVariables() -- < questionable / bad code >
+    self.Should = self:GetConv('cl_drawhud', 'b')
     self.Enable = self:GetConv('control_hud_enable', 'b')
     self.HideGm = self:GetConv('control_hud_hiddef', 'b')
     self.Health = self:GetConv('control_hud_showhp', 'b')
@@ -487,7 +488,7 @@ end
 function ControlHUD:Paint()
     self:UpdateVariables()
 
-    if not self.Enable then return end
+    if not (self.Enable and self.Should) then return end
 
     local lp = LocalPlayer()
 

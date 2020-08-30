@@ -5,12 +5,24 @@
 --------------------------------------------------------------------------------------------------
 -- < Setup >
 --------------------------------------------------------------------------------------------------
-local function LoadFileCS(file)
-	if CLIENT then include(file) else AddCSLuaFile(file) end
+ControlHUD = ControlHUD or {}
+
+ControlHUD.Version = '1.1.0'
+ControlHUD.Author  = 'JFAexe'
+ControlHUD.HooksID = 'control_hud'
+
+function ControlHUD:LoadLuaFiles(path)
+    for _, name in pairs(file.Find(path .. '*', 'LUA')) do
+        local found = path .. name
+
+        if CLIENT then include(found) else AddCSLuaFile(found) end
+    end
 end
 
-LoadFileCS('control/control_hud.lua')
-LoadFileCS('control/control_menu.lua')
+ControlHUD:LoadLuaFiles('control_hud/')
+ControlHUD:LoadLuaFiles('control_hud/mods/')
+
+resource.AddFile('resource/fonts/control.ttf')
 
 --          Nobody knew her name
 --      But she turned up just the same

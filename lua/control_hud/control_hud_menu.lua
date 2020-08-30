@@ -2,32 +2,25 @@
 -- https://github.com/JFAexe/Control-HUD
 -- Commercial use is allowed only by request
 
-if not ControlHUD then return end
-
-local font    = 'DermaDefault'
-
-
 --------------------------------------------------------------------------------------------------
 -- < Presets >
 --------------------------------------------------------------------------------------------------
 ControlHUD.Presets = ControlHUD.Presets or {}
 
 ControlHUD.Presets.Default = {
-    control_hud_enable = '1', control_hud_hiddef = '1', control_hud_showhp = '1',
-    control_hud_showar = '1', control_hud_showam = '1', control_hud_showwi = '0',
-    control_hud_showcr = '1', control_hud_showdt = '1', control_hud_sepbul = '1',
-    control_hud_noanim = '0', control_hud_crosst = '1', control_hud_crosss = '1',
-    control_hud_amarcr = '72', control_hud_amarct = '6', control_hud_hpsmul = '2',
-    control_hud_arsmul = '3', control_hud_animtm = '4',
+    control_hud_enable = '1', control_hud_hiddef = '1', control_hud_hiddov = '1',  control_hud_showhp = '1',
+    control_hud_showar = '1', control_hud_showam = '1', control_hud_showwi = '0',  control_hud_sepbul = '1',
+    control_hud_noanim = '0', control_hud_showcr = '1', control_hud_showlh = '1',  control_hud_showds = '1',
+    control_hud_showmt = '1', control_hud_crosst = '2', control_hud_amarcr = '72', control_hud_amarct = '6',
+    control_hud_crsize = '1', control_hud_hpsmul = '2', control_hud_arsmul = '3',  control_hud_animtm = '4',
 }
 
 ControlHUD.Presets.Casual = {
-    control_hud_enable = '1', control_hud_hiddef = '1', control_hud_showhp = '1',
-    control_hud_showar = '1', control_hud_showam = '1', control_hud_showwi = '1',
-    control_hud_showcr = '1', control_hud_showdt = '1', control_hud_sepbul = '0',
-    control_hud_noanim = '1', control_hud_crosst = '3', control_hud_crosss = '1',
-    control_hud_amarcr = '96', control_hud_amarct = '8', control_hud_hpsmul = '3',
-    control_hud_arsmul = '4', control_hud_animtm = '4',
+    control_hud_enable = '1', control_hud_hiddef = '1', control_hud_hiddov = '1',  control_hud_showhp = '1',
+    control_hud_showar = '1', control_hud_showam = '1', control_hud_showwi = '1',  control_hud_sepbul = '0',
+    control_hud_noanim = '1', control_hud_showcr = '1', control_hud_showlh = '0',  control_hud_showds = '0',
+    control_hud_showmt = '0', control_hud_crosst = '1', control_hud_amarcr = '96', control_hud_amarct = '8',
+    control_hud_crsize = '1', control_hud_hpsmul = '3', control_hud_arsmul = '4',  control_hud_animtm = '4',
 }
 
 
@@ -35,15 +28,24 @@ ControlHUD.Presets.Casual = {
 -- < Menu >
 --------------------------------------------------------------------------------------------------
 function ControlHUD:SettingsMenu(panel)
+    local font = 'DermaDefault'
+
     function panel:Paint(w, h)
         ControlHUD:DrawRect(w - 2, h - 2, 1, 1, ControlHUD.BL)
         ControlHUD:DrawRect(w - 4, h - 4, 2, 2, ControlHUD.WH)
     end
 
+    function panel:AddLabel(text)
+        local Label = self:Help(text)
+        Label:SetTextColor(ControlHUD.BL)
+        Label:SetFont(font)
+    end
+
     function panel:AddHelp(text)
-        local Help = self:Help(text)
-        Help:SetTextColor(ControlHUD.BL)
+        local Help = self:ControlHelp(text)
+        Help:SetTextColor(ControlHUD.TG)
         Help:SetFont(font)
+        Help:DockMargin(32, 4, 32, 2)
     end
 
     function panel:AddCheckBox(var, text)
@@ -121,13 +123,20 @@ function ControlHUD:SettingsMenu(panel)
 
     for name, data in SortedPairsByMemberValue(self.ConVars, 'id') do
         AddControl[data.type](name, data)
+
+        if data.help then
+            panel:AddHelp(data.help)
+        end
     end
 
-    panel:AddHelp('Control HUD v' .. self.Version .. ' by ' .. self.Author)
+    panel:AddLabel('Control HUD v' .. self.Version .. ' by ' .. self.Author)
 
-    panel:AddButton('GitHub').DoClick = function() gui.OpenURL('https://github.com/JFAexe/Control-HUD') end
+    panel:AddButton('Workshop').DoClick    = function() gui.OpenURL('https://steamcommunity.com/sharedfiles/filedetails/?id=2204855339') end
+    panel:AddButton('GitHub').DoClick      = function() gui.OpenURL('https://github.com/JFAexe/Control-HUD') end
 
-    panel:AddHelp('')
+    panel:AddButton('Reload HUD').DoClick  = function() self:Init() end
+
+    panel:AddLabel('')
 end
 
 function ControlHUD:CreateMenu()

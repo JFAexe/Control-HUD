@@ -94,13 +94,13 @@ function ControlHUD:SettingsMenu(panel)
             ControlHUD:DrawRect(w, h, 0, 0, ControlHUD.BL)
             if bool then ControlHUD:DrawRect(w - 4, h - 4, 2, 2, ControlHUD.WH) end
         end
-    
+
         return Button
     end
 
     local header = panel.Header
     header:SetTextColor(self.BL)
-    header.UpdateColours = function(self, skin) return end
+    header.UpdateColours = function(object, skin) return end
 
     panel:ClearControls()
 

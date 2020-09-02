@@ -144,18 +144,18 @@ local mapanim, maptitle, spawntime                                         = 0
 --------------------------------------------------------------------------------------------------
 -- < Utils >
 --------------------------------------------------------------------------------------------------
-function ControlHUD:AddHook(hook, name, func)
+function ControlHUD:AddHook(id, name, func)
     if not (func and name) then return end
 
-    NewHook(hook, self.HooksID .. '_' .. name, function(...)
+    NewHook(id, self.HooksID .. '_' .. name, function(...)
         return func(self, ...)
     end)
 end
 
-function ControlHUD:RemHook(hook, name)
+function ControlHUD:RemHook(id, name)
     if not name then return end
 
-    RemHook(hook, self.HooksID .. '_' .. name)
+    RemHook(id, self.HooksID .. '_' .. name)
 end
 
 function ControlHUD:GetConv(var, type)
@@ -214,14 +214,13 @@ function ControlHUD:GetThirdpersonPos(x, y)
 
     local td  = {}
     td.start  = lp:GetShootPos()
-    td.endpos = td.start + (lp:EyeAngles() + lp:GetPunchAngle()):Forward() * 16384
+    td.endpos = td.start + (lp:EyeAngles() + lp:GetViewPunchAngles()):Forward() * 16384
     td.filter = lp
 
     local tr   = util.TraceLine(td)
     local pos  = tr.HitPos:ToScreen()
-    local x, y = pos.x, pos.y
 
-    return x, y
+    return pos.x, pos.y
 end
 
 function ControlHUD:ColorAlphaAnim(color, anim, col)
@@ -554,7 +553,7 @@ function ControlHUD:Init()
     for name, data in pairs(self.ConVars) do
         NewConv(name, data.def, true, false, data.desc, data.min, data.max)
     end
-    
+
     self:UpdateVariables()
 
     local font, size, anti = 'AvantGardeGothicCTT', 28, true
